@@ -176,8 +176,8 @@ contract Vault is Escapable {
         uint _paymentDalay
     ) returns(uint) {
         if (!allowedSpenders[msg.sender] ) throw;
-        uint idPayment= payments.length;
-        payments.length ++;
+        uint idPayment = payments.length;
+        payments.length++;
         Payment payment = payments[idPayment];
         payment.spender = msg.sender;
         payment.earliestPayTime = _paymentDalay >= timeLock ? now + _paymentDalay : now + timeLock;
@@ -197,7 +197,6 @@ contract Vault is Escapable {
 
         Payment payment = payments[_idPayment];
 
-        if (msg.sender != payment.recipient) throw;
         if (!allowedSpenders[payment.spender]) throw;
         if (now < payment.earliestPayTime) throw;
         if (payment.cancelled) throw;
@@ -205,7 +204,7 @@ contract Vault is Escapable {
         if (this.balance < payment.amount) throw;
 
         payment.paid = true;
-        if (! payment.recipient.send(payment.amount)) {
+        if (!payment.recipient.send(payment.amount)) {
             throw;
         }
         PaymentExecuted(_idPayment, payment.recipient, payment.amount);
